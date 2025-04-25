@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -64,6 +64,9 @@ export default function AddPlaceModal({ open, onClose, onAdd, coords }: AddPlace
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Добавить место</DialogTitle>
+          <DialogDescription>
+        Пожалуйста, заполните форму для создания нового места.
+      </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-4">

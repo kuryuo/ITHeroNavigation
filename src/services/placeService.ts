@@ -17,15 +17,14 @@ interface CreateReviewDto {
 }
 
 interface SearchPlaceDto {
-  query: string;
-  latitude?: number;
-  longitude?: number;
-  distanceKm?: number;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
+  distanceKm: number;
+  name: string;
+  categoryIds: string[];
 }
-
-// interface UploadPhotoDto {
-//   file: File;
-// }
 
 export const placeService = {
   async createPlace(data: CreatePlaceDto, token: string) {
@@ -49,18 +48,20 @@ export const placeService = {
     return await res.json();
   },
 
-  async searchPlaces(data: SearchPlaceDto) {
+  async searchPlaces(data: SearchPlaceDto, token: string) {
     const res = await fetch(`${API_BASE}/api/place/search`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
     });
-
+  
     if (!res.ok) throw new Error("Ошибка при поиске мест");
     return await res.json();
-  },
+  }
+  ,
 
   async getNearbyPlaces(latitude: number, longitude: number, distanceKm = 1) {
     const params = new URLSearchParams({
@@ -123,4 +124,17 @@ export const placeService = {
     if (!res.ok) throw new Error("Ошибка при получении фото");
     return await res.json();
   },
+
+  async deletePlace(placeId: string, token: string) {
+    const res = await fetch(`${API_BASE}/api/place/${placeId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  
+    if (!res.ok) throw new Error("Ошибка при удалении места");
+    return await res.json();
+  },
+  
 };

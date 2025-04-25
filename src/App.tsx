@@ -24,7 +24,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/map" element={<MapPage />} />
-          <Route path="/place" element={<PlaceDetailsPage />} />
+          <Route path="/place/:id" element={<PlaceDetailsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Route>
 
