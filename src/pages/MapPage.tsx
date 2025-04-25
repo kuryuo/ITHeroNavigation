@@ -33,12 +33,20 @@ const dummyPlaces: Place[] = [
 export default function MapPage() {
   const [places, setPlaces] = useState<Place[]>(dummyPlaces);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [coords, setCoords] = useState<[number, number]>([56.838011, 60.597465]);
 
-  const handleAddPlace = (newPlace: any) => {
-    const id = places.length + 1;
-    const coords: [number, number] = [55.75, 37.57]; 
-    setPlaces([...places, { id, ...newPlace, coords }]);
+  const handleAddPlace = (response: any) => {
+    const placeData = response.result; 
+  
+    const coordsFromPlace: [number, number] = [
+      placeData.location.latitude,
+      placeData.location.longitude,
+    ];
+  
+    const id = places.length + 1; 
+    setPlaces([...places, { id, ...placeData, coords: coordsFromPlace }]);
   };
+  
 
   const handleNavigate = (id: number) => {
     console.log("Навигация к месту", id);
@@ -54,8 +62,8 @@ export default function MapPage() {
 
       <div className="flex flex-1 overflow-hidden">
         <div className="w-2/3 h-screen">
-  <YandexMap />
-</div>
+          <YandexMap coords={coords} onCoordsChange={setCoords} />
+        </div>
 
         <div className="w-1/3 bg-muted overflow-y-auto p-4">
           <div className="flex justify-between items-center mb-4">
@@ -83,6 +91,7 @@ export default function MapPage() {
         open={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onAdd={handleAddPlace}
+        coords={coords}
       />
     </div>
   );

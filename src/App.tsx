@@ -3,7 +3,6 @@ import {
   Routes,
   Route,
   Navigate,
-
 } from "react-router-dom";
 
 import AuthPage from "./pages/AuthPage";
@@ -12,12 +11,15 @@ import MapPage from "./pages/MapPage";
 import PlaceDetailsPage from "./pages/PlaceDetailsPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import PublicRoute from "@/components/PublicRoute";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/auth" element={<AuthPage />} />
+        <Route element={<PublicRoute />}>
+          <Route path="/auth" element={<AuthPage />} />
+        </Route>
 
         <Route element={<ProtectedRoute />}>
           <Route path="/favorites" element={<FavoritesPage />} />

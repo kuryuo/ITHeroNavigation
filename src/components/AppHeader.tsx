@@ -25,7 +25,7 @@ export default function AppHeader() {
     <header className="w-full bg-white shadow-sm flex items-center justify-between px-6 py-4">
       <div
         className="text-xl font-bold cursor-pointer"
-        onClick={() => navigate("/favorites")}
+        onClick={() => navigate("/map")}
       >
         NaviHero
       </div>
@@ -35,9 +35,6 @@ export default function AppHeader() {
         </Button>
         <Button onClick={() => navigate("/profile")}>
           Профиль
-        </Button>
-        <Button onClick={() => console.log("Открыть модалку добавления места")}>
-          Добавить место
         </Button>
         <Button variant="destructive" onClick={handleLogout}>
           Выйти

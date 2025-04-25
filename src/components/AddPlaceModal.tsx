@@ -4,30 +4,59 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { placeService } from "@/services/placeService";
+import { useAuthStore } from "@/store/useAuthStore";
 
 interface AddPlaceModalProps {
   open: boolean;
   onClose: () => void;
-  onAdd: (place: any) => void; 
+  onAdd: (place: any) => void;
+  coords: [number, number];
 }
 
-export default function AddPlaceModal({ open, onClose, onAdd }: AddPlaceModalProps) {
+export default function AddPlaceModal({ open, onClose, onAdd, coords }: AddPlaceModalProps) {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleAdd = () => {
+  const { token } = useAuthStore();
+
+  const handleAdd = async () => {
     if (!name || !address || !category) return;
-    const newPlace = { name, address, category, description, photo };
-    onAdd(newPlace);
-    onClose();
-    setName("");
-    setAddress("");
-    setCategory("");
-    setDescription("");
-    setPhoto(null);
+
+    const newPlace = {
+      name,
+      address,
+      description,
+      location: {
+        latitude: coords[0],
+        longitude: coords[1],
+      },
+      categoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6", 
+    };
+
+    try {
+      setLoading(true);
+
+      const response = await placeService.createPlace(newPlace, token);
+      console.log("Место успешно создано:", response);
+
+      onAdd(response);
+      onClose();
+
+      setName("");
+      setAddress("");
+      setCategory("");
+      setDescription("");
+      setPhoto(null);
+    } catch (error) {
+      console.error("Ошибка при добавлении места:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -65,8 +94,10 @@ export default function AddPlaceModal({ open, onClose, onAdd }: AddPlaceModalPro
         </div>
 
         <DialogFooter>
-          <Button onClick={handleAdd}>Добавить</Button>
-          <Button variant="outline" onClick={onClose}>
+          <Button onClick={handleAdd} disabled={loading}>
+            {loading ? "Добавляем..." : "Добавить"}
+          </Button>
+          <Button variant="outline" onClick={onClose} disabled={loading}>
             Отмена
           </Button>
         </DialogFooter>
