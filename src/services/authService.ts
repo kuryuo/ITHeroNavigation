@@ -42,10 +42,13 @@ export const authService = {
     return json.result.token;
   },
 
-  async logout(): Promise<void> {
+  async logout(token: string): Promise<void> {
     await fetch(`${API_BASE}/api/auth/logout`, {
       method: 'POST',
-      credentials: 'include', 
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: 'include',
     });
-  },
+  },  
 };
