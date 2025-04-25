@@ -3,21 +3,49 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { authService } from "@/services/authService";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthPage() {
   const [form, setForm] = useState({ email: "", password: "", username: "" });
+
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleLogin = () => {
-    console.log("Login with", form);
-  };
+  const handleLogin = async () => {
+    try {
+      const token = await authService.login({
+        email: form.email,
+        password: form.password,
+      });
+  
+      useAuthStore.getState().login({ username: "", email: form.email, id: 0 }, token);
+      console.log("Вход выполнен, токен:", token);
+      navigate("/map");     
+    } catch (err) {
+      console.error("Ошибка при входе", err);
+    }
+  };  
 
-  const handleRegister = () => {
-    console.log("Register with", form);
-  };
+  const handleRegister = async () => {
+    try {
+      const token = await authService.register({
+        username: form.username,
+        email: form.email,
+        password: form.password,
+      });
+  
+      useAuthStore.getState().login({ username: form.username, email: form.email, id: 0 }, token);
+      console.log("Зарегистрирован, токен:", token);
+      navigate("/map"); 
+    } catch (err) {
+      console.error("Ошибка при регистрации", err);
+    }
+  };  
 
   return (
 <div className="h-screen w-screen flex items-center justify-center bg-muted px-4">

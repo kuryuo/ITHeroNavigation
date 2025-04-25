@@ -3,6 +3,7 @@ import AppHeader from "@/components/AppHeader";
 import PlaceCard from "@/components/PlaceCard";
 import AddPlaceModal from "@/components/AddPlaceModal";
 import { Button } from "@/components/ui/button";
+import YandexMap from "@/components/YandexMap";
 
 interface Place {
   id: number;
@@ -52,17 +53,10 @@ export default function MapPage() {
       <AppHeader />
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Карта */}
-        <div className="w-2/3">
-        <div className="w-2/3 h-full">
-  <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-600">
-    Здесь будет карта
-  </div>
+        <div className="w-2/3 h-screen">
+  <YandexMap />
 </div>
 
-        </div>
-
-        {/* Список карточек */}
         <div className="w-1/3 bg-muted overflow-y-auto p-4">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold">Места</h2>
